@@ -12,7 +12,6 @@ class Serial : public Reference {
 	GDCLASS(Serial, Reference);
 
 	serialib serial;
-	int port_id;
 
 protected:
 	static void _bind_methods();
@@ -26,7 +25,11 @@ public:
 
 	int available();
 
-	bool connect_to_serial_port(int port_id);
+	// "To specify a COM port number greater than 9, use the following syntax: "\\.\COM10".
+	// This syntax works for all port numbers and hardware that allows COM port numbers to be specified."
+	// https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN#communications-resources
+	bool connect_to_serial_port(const String& port_name);
+
 	bool is_serial_connected();
 	void disconnect_serial();
 

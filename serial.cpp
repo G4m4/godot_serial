@@ -57,29 +57,23 @@ void Serial::_bind_methods() {
 		ClassDB::bind_method(D_METHOD("disconnect_serial"), &Serial::disconnect_serial);
 }
 
-bool Serial::connect_to_serial_port(int port_id) {
-	if (port_id >= 0 && port_id < 99) {
-		if (serial.isDeviceOpen()) {
-			serial.closeDevice();
-		}
-
-		char port_name_buf[32];
-#if defined (_WIN32) || defined(_WIN64)
-		// "To specify a COM port number greater than 9, use the following syntax: "\\.\COM10".
-		// This syntax works for all port numbers and hardware that allows COM port numbers to be specified."
-		// https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea?redirectedfrom=MSDN#communications-resources
-		sprintf(&port_name_buf[0], "\\\\.\\COM%d", port_id);
-#endif
-#if defined (__linux__) || defined(__APPLE__)
-		sprintf(&port_name_buf[0], "/dev/ttyS%d", port_id);
-#endif
-
-		if (serial.openDevice(port_name_buf, 9600) != 1) {
-			ERR_PRINT("Serial lib: could not connect\n");
-		}
-		return serial.isDeviceOpen();
+bool Serial::connect_to_serial_port(const String & port_name) {
+	if (serial.isDeviceOpen()) {
+		serial.closeDevice();
 	}
-	return false;
+
+//		char port_name_buf[32];
+//#if defined (_WIN32) || defined(_WIN64)
+//		sprintf(&port_name_buf[0], "\\\\.\\COM%d", port_id);
+//#endif
+//#if defined (__linux__) || defined(__APPLE__)
+//		sprintf(&port_name_buf[0], "/dev/ttyS%d", port_id);
+//#endif
+
+	if (serial.openDevice(port_name.ascii().ptr(), 9600) != 1) {
+		ERR_PRINT("Serial lib: could not connect\n");
+	}
+	return serial.isDeviceOpen();
 }
 
 bool Serial::is_serial_connected() {
@@ -92,8 +86,7 @@ void Serial::disconnect_serial() {
 	}
 }
 
-Serial::Serial() :
-	port_id(-1) {
+Serial::Serial() {
 }
 
 Serial::~Serial() {
