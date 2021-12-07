@@ -1,24 +1,37 @@
 /// @copyright gm 2021
 
-#ifndef SUMMATOR_H
-#define SUMMATOR_H
+#ifndef SERIAL_H
+#define SERIAL_H
 
 #include "core/reference.h"
 
-class Serial : public Reference {
-    GDCLASS(Serial, Reference);
+// Serial library
+#include <serialib.h>
 
-    int count;
+class Serial : public Reference {
+	GDCLASS(Serial, Reference);
+
+	serialib serial;
+	int port_id;
 
 protected:
-    static void _bind_methods();
+	static void _bind_methods();
+	void reset();
 
 public:
-    void add(int p_value);
-    void reset();
-    int get_total() const;
+	void write_char(int);
+	int read_char();
+	void write_string(const String&);
+	String read_string();
 
-    Serial();
+	int available();
+
+	bool connect_to_serial_port(int port_id);
+	bool is_serial_connected();
+	void disconnect_serial();
+
+	Serial();
+	~Serial();
 };
 
-#endif // SUMMATOR_H
+#endif // SERIAL_H
