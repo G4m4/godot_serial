@@ -1,0 +1,3 @@
+[submodule "serialib"]
+	path = serialib
+	url = git@github.com:G4m4/serialib.git

@@ -2,6 +2,9 @@
 
 #include "serial.h"
 
+// Serial library
+#include <serialib.h>
+
 void Serial::add(int p_value) {
     count += p_value;
 }

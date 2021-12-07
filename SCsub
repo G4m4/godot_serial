@@ -4,3 +4,4 @@ Import('env')
 
 env_serial = env.Clone()
 env_serial.add_source_files(env.modules_sources, "*.cpp")
+env_serial.Append(CPPPATH=["serialib/lib"])
