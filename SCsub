@@ -2,6 +2,26 @@
 
 Import('env')
 
+# Godot module side
+module_obj = []
+
 env_serial = env.Clone()
-env_serial.add_source_files(env.modules_sources, "*.cpp")
+
 env_serial.Append(CPPPATH=["serialib/lib"])
+env.modules_sources += module_obj
+
+# External library side
+
+thirdparty_obj = []
+thirdparty_sources = [
+    "serialib/lib/serialib.cpp"
+]
+env_thirdparty = env_serial.Clone()
+env_thirdparty.disable_warnings()
+env_thirdparty.add_source_files(thirdparty_obj, thirdparty_sources)
+env.modules_sources += thirdparty_obj
+
+env_serial.add_source_files(module_obj, "*.cpp")
+env.modules_sources += module_obj
+
+env.Depends(module_obj, thirdparty_obj)
